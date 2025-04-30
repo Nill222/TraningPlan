@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренировочные недели</title>
+</head>
+<body>
+
+<!-- Форма для поиска тренировочной недели по ID -->
+<h1>Поиск по ID</h1>
+<form action="/trainingWeek/find" method="post">
+    <label for="id">Введите ID недели:</label>
+    <input type="number" id="id" name="id" required>
+    <button type="submit">Найти</button>
+</form>
+
+<!-- Вывод данных о тренировочной неделе, если она найдена -->
+<div th:if="${trainingWeek != null}">
+    <h2>Информация о тренировочной неделе</h2>
+    <p>Название недели: <span th:text="${trainingWeek.weekNum}"></span></p>
+    <p>День недели: <span th:text="${trainingWeek.day.nameOfTheDay}"></span></p>
+    <p>Название упражнения: <span th:text="${trainingWeek.exercise.nameOfExercise}"></span></p>
+    <p>Повторения: <span th:text="${trainingWeek.repetitions}"></span></p>
+    <p>Количество подходов: <span th:text="${trainingWeek.numberOfApproaches}"></span></p>
+    <a th:href="@{/trainingWeek/update/{id}(id=${trainingWeek.id})}">Редактировать</a>
+    <form th:action="@{/trainingWeek/delete/{id}(id=${trainingWeek.id})}" method="post">
+        <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить эту неделю?');">Удалить</button>
+    </form>
+</div>
+
+<!-- Список всех тренировочных недель -->
+<h2>Все тренировочные недели</h2>
+<ul th:each="week : ${trainingWeekList}">
+    <li>
+       <p>Неделя: <span th:text="${week.weekNum}">Неделя:</span></p>
+        <br>
+        <p>День недели: <span th:text="${week.day.nameOfTheDay}">День недели:</span></p>
+        <br>
+        <p>Название упражнения: <span th:text="${week.exercise.nameOfExercise}">Название упражнения: </span></p>
+        <br>
+        <p>Повторения: <span th:text="${week.repetitions}">Повторения: </span></p>
+        <br>
+        <p>Подходы: <span th:text="${week.numberOfApproaches}">Количество подходов:</span></p>
+        <a th:href="@{/trainingWeek/update/{id}(id=${week.id})}">Редактировать</a>
+        |
+        <!-- Кнопка удаления для каждой недели -->
+        <form th:action="@{/trainingWeek/delete/{id}(id=${week.id})}" method="post" style="display:inline;">
+            <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить эту неделю?');">Удалить</button>
+        </form>
+    </li>
+
+</ul>
+
+<!-- Форма для создания новой тренировочной недели -->
+<h2>Создать новую тренировочную неделю</h2>
+<form action="/trainingWeek" method="post">
+    <label for="weekNum">Неделя:</label>
+    <input type="text" id="weekNum" name="weekNum" required>
+    <br>
+    <label for="repetitions">Повторения:</label>
+    <input type="text" id="repetitions" name="repetitions" required>
+    <br>
+    <label for="numberOfApproaches">Подходы:</label>
+    <input type="text" id="numberOfApproaches" name="numberOfApproaches" required>
+    <br>
+    <label for="name">Выберите упражнение:</label>
+    <select id="name" name="name" required>
+        <option disabled selected value="">-- Выберите упражнение --</option>
+        <th:block th:each="exercise : ${exercises}">
+            <option th:text="${exercise.nameOfExercise}"></option>
+        </th:block>
+    </select>
+    <br>
+    <label for="day">Выберите день недели:</label>
+    <label for="day">Выберите день недели:</label>
+    <select id="day" name="day" required>
+        <option disabled selected value="">-- Выберите день недели --</option>
+        <th:block th:each="day : ${dayOfTheWeek}">
+            <option th:value="${day.nameOfTheDay}" th:text="${day.nameOfTheDay}"></option>
+        </th:block>
+    </select>
+
+    <br>
+    <button type="submit">Создать</button>
+</form>
+
+<form action="/trainingWeek/exercise" method="post">
+    <label for="nameOfExercise">Добавить упражнение:</label>
+    <input type="text" id="nameOfExercise" name="nameOfExercise" required>
+    <button type="submit">Создать</button>
+</form>
+
+</body>
+</html>

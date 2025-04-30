@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование тренировочной недели</title>
+</head>
+<body>
+
+<h1>Редактирование тренировочной недели</h1>
+
+<!-- Форма для обновления тренировочной недели -->
+<form th:action="@{/trainingWeek/{id}(id=${trainingWeek.id})}" method="post">
+    <!-- Пример скрытого поля для передачи ID -->
+    <input type="hidden" name="id" th:value="${trainingWeek.id}">
+
+    <label for="weekNum">Неделя:</label>
+    <input type="text" id="weekNum" name="weekNum" th:value="${trainingWeek.weekNum}" required>
+    <br>
+
+    <label for="repetitions">Повторения:</label>
+    <input type="text" id="repetitions" name="repetitions" th:value="${trainingWeek.repetitions}" required>
+    <br>
+
+    <label for="numberOfApproaches">Подходы:</label>
+    <input type="text" id="numberOfApproaches" name="numberOfApproaches" th:value="${trainingWeek.numberOfApproaches}" required>
+    <br>
+
+    <label for="name">Выберите упражнение:</label>
+    <select id="name" name="name" required>
+        <option disabled selected value="">-- Выберите упражнение --</option>
+        <th:block th:each="exercise : ${exercises}">
+            <option th:value="${exercise.nameOfExercise}" th:text="${exercise.nameOfExercise}"
+                    th:selected="${exercise.nameOfExercise == trainingWeek.exercise?.nameOfExercise}"></option>
+        </th:block>
+    </select>
+    <br>
+
+    <label for="day">Выберите день недели:</label>
+    <select id="day" name="day" required>
+        <option disabled selected value="">-- Выберите день недели --</option>
+        <th:block th:each="day : ${dayOfTheWeek}">
+            <option th:value="${day.nameOfTheDay}" th:text="${day.nameOfTheDay}"
+                    th:selected="${day.nameOfTheDay == trainingWeek.day?.nameOfTheDay}"></option>
+        </th:block>
+    </select>
+    <br>
+
+    <button type="submit">Обновить</button>
+</form>
+
+</body>
+</html>
